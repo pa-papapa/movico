@@ -463,7 +463,7 @@
 
 <div class="tabs">
   <button class="tab active" onclick="switchTab('location')">現在地から探す</button>
-  <button class="tab" onclick="switchTab('favorites')">お気に入り映画館</button>
+  <button class="tab" onclick="switchTab('favorites')">お気に入り映画館から探す</button>
 </div>
 
 <!-- Location Tab -->
@@ -525,7 +525,7 @@
 <script>
 // ── Config ──
 // APIキーをここに貼り付けてください
-const TMDB_API_KEY = '569091699fcdd941f2f21255ad2f3c88';
+const TMDB_API_KEY = 'YOUR_API_KEY_HERE';
 const TMDB_BASE = 'https://api.themoviedb.org/3';
 const IMG_BASE = 'https://image.tmdb.org/t/p/w200';
 
@@ -689,8 +689,8 @@ function openPopup(movie) {
     posterEl.innerHTML = `<div class="popup-poster-placeholder">🎬</div>`;
   }
 
-  // Show nearby theaters (favorites first, then sample)
-  const theaters = favorites.length > 0 ? favorites : CINEPLEX.slice(0,3);
+  // Show nearby theaters (always show sample cineplex in location tab)
+  const theaters = CINEPLEX.slice(0,3);
   document.getElementById('popup-theaters').innerHTML = theaters.map(t => `
     <div class="theater-item">
       <div>
