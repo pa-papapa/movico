@@ -603,8 +603,10 @@ async function locateAndFetch() {
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(async (pos) => {
+  // 銀座の固定座標でテスト（緯度35.6717, 経度139.7650）
+    const pos = { coords: { latitude: 35.6717, longitude: 139.7650 } };
     txt.textContent = '上映中の映画を取得中...';
+    await (async () => {
     try {
       const res = await fetch(
         `${TMDB_BASE}/movie/now_playing?api_key=${TMDB_API_KEY}&language=ja-JP&region=JP&page=1`
@@ -618,10 +620,7 @@ async function locateAndFetch() {
       txt.textContent = 'データの取得に失敗しました。APIキーを確認してください。';
     }
     btn.disabled = false;
-  }, () => {
-    txt.textContent = '位置情報の取得を許可してください';
-    btn.disabled = false;
-  });
+  })();
 }
 
 // ── Render Clouds ──
