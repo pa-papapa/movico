@@ -525,7 +525,8 @@
 <script>
 // ── Config ──
 // APIキーをここに貼り付けてください
-const TMDB_API_KEY = '569091699fcdd941f2f21255ad2f3c88';
+const TMDB_API_KEY = 'AIzaSyACQ-xoJRuENEQeaOfnCgxgFxRh2_G8Qhk';
+const GOOGLE_API_KEY = 'AIzaSyACQ-xoJRuENEQeaOfnCgxgFxRh2_G8Qhk';
 const TMDB_BASE = 'https://api.themoviedb.org/3';
 const IMG_BASE = 'https://image.tmdb.org/t/p/w200';
 
@@ -533,6 +534,9 @@ const IMG_BASE = 'https://image.tmdb.org/t/p/w200';
 let currentDateOffset = 0;
 let currentTimeSlot = 'all';
 let movies = [];
+let nearbyTheaters = [];
+let userLat = null;
+let userLng = null;
 let favorites = JSON.parse(localStorage.getItem('movico_favs') || '[]');
 
 // ── Theater Data ──
@@ -603,24 +607,75 @@ async function locateAndFetch() {
     return;
   }
 
-  // 銀座の固定座標でテスト（緯度35.6717, 経度139.7650）
-    const pos = { coords: { latitude: 35.6717, longitude: 139.7650 } };
-    txt.textContent = '上映中の映画を取得中...';
-    await (async () => {
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    userLat = lat;
+    userLng = lng;
+
+    txt.textContent = '近くの映画館を検索中...';
+
     try {
+      // Google Places APIで近くの映画館を検索
+      const placesRes = await fetch(
+        `https://places.googleapis.com/v1/places:searchNearby`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': GOOGLE_API_KEY,
+            'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.location,places.websiteUri,places.id'
+          },
+          body: JSON.stringify({
+            includedTypes: ['movie_theater'],
+            maxResultCount: 10,
+            locationRestriction: {
+              circle: {
+                center: { latitude: lat, longitude: lng },
+                radius: 5000
+              }
+            }
+          })
+        }
+      );
+
+      const placesData = await placesRes.json();
+      nearbyTheaters = (placesData.places || []).map(p => ({
+        name: p.displayName?.text || '映画館',
+        address: p.formattedAddress || '',
+        url: p.websiteUri || `https://www.google.com/search?q=${encodeURIComponent(p.displayName?.text || '映画館')}+上映スケジュール`,
+        lat: p.location?.latitude,
+        lng: p.location?.longitude,
+        type: 'nearby'
+      }));
+
+      txt.textContent = `${nearbyTheaters.length}件の映画館が見つかりました。映画を取得中...`;
+
+    } catch(e) {
+      console.error('Places API error:', e);
+      nearbyTheaters = [];
+    }
+
+    try {
+      // TMDBで現在公開中の映画を取得
       const res = await fetch(
         `${TMDB_BASE}/movie/now_playing?api_key=${TMDB_API_KEY}&language=ja-JP&region=JP&page=1`
       );
       const data = await res.json();
       movies = data.results || [];
       renderClouds();
-      txt.textContent = `${movies.length}本の映画が見つかりました`;
+      txt.textContent = nearbyTheaters.length > 0
+        ? `${movies.length}本の映画・${nearbyTheaters.length}件の映画館が見つかりました`
+        : `${movies.length}本の映画が見つかりました`;
       btn.textContent = '再取得する';
     } catch(e) {
       txt.textContent = 'データの取得に失敗しました。APIキーを確認してください。';
     }
     btn.disabled = false;
-  })();
+  }, () => {
+    txt.textContent = '位置情報の取得を許可してください';
+    btn.disabled = false;
+  });
 }
 
 // ── Render Clouds ──
@@ -689,8 +744,8 @@ function openPopup(movie) {
     posterEl.innerHTML = `<div class="popup-poster-placeholder">🎬</div>`;
   }
 
-  // Show nearby theaters (always show sample cineplex in location tab)
-  const theaters = CINEPLEX.slice(0,3);
+  // Show nearby theaters from Google Places, fallback to sample
+  const theaters = nearbyTheaters.length > 0 ? nearbyTheaters.slice(0,5) : CINEPLEX.slice(0,3);
   document.getElementById('popup-theaters').innerHTML = theaters.map(t => `
     <div class="theater-item">
       <div>
