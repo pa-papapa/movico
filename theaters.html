@@ -6,22 +6,25 @@
 <title>お気に入り映画館 — MOVICO</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --sky-deep: #a0c4e0;
-    --ink: #1a2a3a;
-    --ink-soft: #3a5068;
-    --cloud-shadow: rgba(150,190,220,0.3);
-    --accent: #e07060;
-  }
+  :root { --sky-deep: #a0c4e0; --ink: #1a2a3a; --ink-soft: #3a5068; --cloud-shadow: rgba(150,190,220,0.3); --accent: #e07060; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'DM Sans', sans-serif; background: linear-gradient(180deg, #d6eaf8 0%, #bdd6ec 40%, #a8c8e4 100%); min-height: 100vh; color: var(--ink); }
   header { text-align: center; padding: 1.8rem 1rem 1rem; position: sticky; top: 0; z-index: 100; background: linear-gradient(180deg, rgba(214,234,248,0.97) 0%, rgba(189,214,236,0.95) 100%); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(160,196,224,0.3); }
   .logo-svg { width: 150px; height: 50px; display: block; margin: 0 auto; }
   .tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.78rem; color: var(--ink-soft); letter-spacing: 0.08em; margin-top: 0.2rem; }
   .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 300; color: var(--ink); letter-spacing: 0.1em; margin-top: 0.5rem; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.9rem; padding: 1.2rem 1rem 3rem; max-width: 1400px; margin: 0 auto; }
+
+  /* 並べ替えボタン */
+  .sort-bar { display: flex; justify-content: center; gap: 0.6rem; padding: 0.8rem 1rem 0; }
+  .sort-btn { font-family: 'DM Sans', sans-serif; font-size: 0.75rem; padding: 0.35rem 1rem; border-radius: 2rem; border: 1.5px solid rgba(58,80,104,0.3); background: rgba(255,255,255,0.5); color: var(--ink-soft); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem; }
+  .sort-btn:hover { background: rgba(255,255,255,0.8); color: var(--ink); }
+  .sort-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+  .sort-status { text-align: center; font-size: 0.7rem; color: var(--ink-soft); font-style: italic; padding: 0.4rem 0 0; min-height: 1.4em; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.9rem; padding: 1rem 1rem 3rem; max-width: 1400px; margin: 0 auto; }
   .area-heading { grid-column: 1 / -1; font-family: 'Cormorant Garamond', serif; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--ink-soft); text-transform: uppercase; padding: 0.4rem 0 0.1rem; display: flex; align-items: center; gap: 0.6rem; }
   .area-heading::after { content: ''; flex: 1; height: 1px; background: rgba(58,80,104,0.2); }
+
   .card { background: rgba(255,255,255,0.9); border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 16px var(--cloud-shadow); transition: transform 0.22s ease, box-shadow 0.22s ease; display: flex; flex-direction: column; }
   .card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(150,190,220,0.5); }
   .iframe-wrap { position: relative; width: 100%; height: 200px; overflow: hidden; background: #eef4f8; }
@@ -30,15 +33,19 @@
   .card-footer { padding: 0.65rem 0.9rem; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(160,196,224,0.25); background: rgba(255,255,255,0.95); }
   .card-name { font-family: 'Cormorant Garamond', serif; font-size: 0.92rem; color: var(--ink); line-height: 1.3; }
   .card-area { font-size: 0.65rem; color: var(--ink-soft); margin-top: 1px; }
+  .card-dist { font-size: 0.62rem; color: var(--accent); margin-top: 2px; font-weight: 500; display: none; }
   .card-link { display: inline-flex; align-items: center; font-size: 0.7rem; color: var(--ink-soft); text-decoration: none; border: 1px solid rgba(160,196,224,0.5); border-radius: 1rem; padding: 0.22rem 0.65rem; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; margin-left: 0.4rem; }
   .card-link:hover { background: var(--ink); color: white; border-color: var(--ink); }
+
   .card-simple { background: rgba(255,255,255,0.82); border-radius: 1rem; padding: 1rem 1.1rem; box-shadow: 0 3px 12px var(--cloud-shadow); transition: transform 0.22s ease, box-shadow 0.22s ease; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--ink); position: relative; overflow: hidden; }
   .card-simple::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--sky-deep), var(--accent)); opacity: 0; transition: opacity 0.2s; }
   .card-simple:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(150,190,220,0.45); }
   .card-simple:hover::before { opacity: 1; }
   .card-simple .card-name { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; }
   .card-simple .card-area { font-size: 0.67rem; color: var(--ink-soft); margin-top: 2px; }
+  .card-simple .card-dist { display: none; }
   .card-simple-arrow { font-size: 0.8rem; color: var(--sky-deep); flex-shrink: 0; margin-left: 0.5rem; }
+
   .page-footer { text-align: center; padding: 1rem 1rem 3rem; }
   .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--ink-soft); text-decoration: none; border: 1px solid rgba(58,80,104,0.25); border-radius: 2rem; padding: 0.4rem 1rem; transition: all 0.2s; }
   .back-link:hover { background: rgba(255,255,255,0.6); color: var(--ink); }
@@ -59,66 +66,172 @@
   <div class="tagline">wander into a film</div>
   <div class="page-title">お気に入り映画館</div>
 </header>
-<div class="grid">
 
-  <div class="area-heading">千代田・中央</div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.shogakukan.co.jp/jinbocho-theater/','_blank')"></div><iframe src="https://www.shogakukan.co.jp/jinbocho-theater/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">神保町シアター</div><div class="card-area">千代田区 神保町</div></div><a class="card-link" href="https://www.shogakukan.co.jp/jinbocho-theater/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://ttcg.jp/human_yurakucho/','_blank')"></div><iframe src="https://ttcg.jp/human_yurakucho/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ヒューマントラストシネマ有楽町</div><div class="card-area">千代田区 有楽町</div></div><a class="card-link" href="https://ttcg.jp/human_yurakucho/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.kadokawa-cinema.jp/yurakucho/','_blank')"></div><iframe src="https://www.kadokawa-cinema.jp/yurakucho/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">角川シネマ有楽町</div><div class="card-area">千代田区 有楽町</div></div><a class="card-link" href="https://www.kadokawa-cinema.jp/yurakucho/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://athenee.net','_blank')"></div><iframe src="https://athenee.net" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">アテネ・フランセ文化センター</div><div class="card-area">千代田区 神田</div></div><a class="card-link" href="https://athenee.net" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://cinemalice.theater/','_blank')"></div><iframe src="https://cinemalice.theater/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマリス</div><div class="card-area">千代田区 神田小川町</div></div><a class="card-link" href="https://cinemalice.theater/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://cineswitch.com/','_blank')"></div><iframe src="https://cineswitch.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネスイッチ銀座</div><div class="card-area">中央区 銀座</div></div><a class="card-link" href="https://cineswitch.com/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.nfaj.go.jp/','_blank')"></div><iframe src="https://www.nfaj.go.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">国立映画アーカイブ</div><div class="card-area">中央区 京橋</div></div><a class="card-link" href="https://www.nfaj.go.jp/" target="_blank">開く →</a></div></div>
-
-  <div class="area-heading">新宿・早稲田</div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.ks-cinema.com/','_blank')"></div><iframe src="https://www.ks-cinema.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">K's cinema</div><div class="card-area">新宿区 新宿</div></div><a class="card-link" href="https://www.ks-cinema.com/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://shinjuku.musashino-k.jp/','_blank')"></div><iframe src="https://shinjuku.musashino-k.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">新宿武蔵野館</div><div class="card-area">新宿区 新宿</div></div><a class="card-link" href="https://shinjuku.musashino-k.jp/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.cinemart.co.jp/theater/shinjuku/','_blank')"></div><iframe src="https://www.cinemart.co.jp/theater/shinjuku/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマート新宿</div><div class="card-area">新宿区 新宿</div></div><a class="card-link" href="https://www.cinemart.co.jp/theater/shinjuku/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://ttcg.jp/theatre_shinjuku/','_blank')"></div><iframe src="https://ttcg.jp/theatre_shinjuku/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">テアトル新宿</div><div class="card-area">新宿区 新宿</div></div><a class="card-link" href="https://ttcg.jp/theatre_shinjuku/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.institutfrancais.jp/tokyo/agenda/categories/film/','_blank')"></div><iframe src="https://www.institutfrancais.jp/tokyo/agenda/categories/film/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">アンスティチュ・フランセ東京</div><div class="card-area">新宿区 市谷</div></div><a class="card-link" href="https://www.institutfrancais.jp/tokyo/agenda/categories/film/" target="_blank">開く →</a></div></div>
-  <a class="card-simple" href="http://wasedashochiku.co.jp/" target="_blank"><div><div class="card-name">早稲田松竹</div><div class="card-area">新宿区 高田馬場</div></div><span class="card-simple-arrow">→</span></a>
-
-  <div class="area-heading">渋谷・恵比寿・目黒・品川</div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.bunkamura.co.jp/cinema_miyashita/','_blank')"></div><iframe src="https://www.bunkamura.co.jp/cinema_miyashita/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ル・シネマ 渋谷宮下</div><div class="card-area">渋谷区 渋谷</div></div><a class="card-link" href="https://www.bunkamura.co.jp/cinema_miyashita/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.unitedcinemas.jp/ygc/index.html','_blank')"></div><iframe src="https://www.unitedcinemas.jp/ygc/index.html" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">恵比寿ガーデンシネマ</div><div class="card-area">渋谷区 恵比寿</div></div><a class="card-link" href="https://www.unitedcinemas.jp/ygc/index.html" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://ttcg.jp/human_shibuya/','_blank')"></div><iframe src="https://ttcg.jp/human_shibuya/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ヒューマントラストシネマ渋谷</div><div class="card-area">渋谷区 渋谷</div></div><a class="card-link" href="https://ttcg.jp/human_shibuya/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.imageforum.co.jp/theatre/','_blank')"></div><iframe src="https://www.imageforum.co.jp/theatre/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シアター・イメージフォーラム</div><div class="card-area">渋谷区 渋谷</div></div><a class="card-link" href="https://www.imageforum.co.jp/theatre/" target="_blank">開く →</a></div></div>
-  <a class="card-simple" href="http://www.eurospace.co.jp/" target="_blank"><div><div class="card-name">ユーロスペース</div><div class="card-area">渋谷区 円山町</div></div><span class="card-simple-arrow">→</span></a>
-  <a class="card-simple" href="http://www.cinemavera.com/" target="_blank"><div><div class="card-name">シネマヴェーラ渋谷</div><div class="card-area">渋谷区 円山町</div></div><span class="card-simple-arrow">→</span></a>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.cinequinto.com/shibuya/','_blank')"></div><iframe src="https://www.cinequinto.com/shibuya/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネクイント渋谷</div><div class="card-area">渋谷区 宇田川町</div></div><a class="card-link" href="https://www.cinequinto.com/shibuya/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.cinequinto.com/white/','_blank')"></div><iframe src="https://www.cinequinto.com/white/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ホワイトシネクイント</div><div class="card-area">渋谷区 宇田川町</div></div><a class="card-link" href="https://www.cinequinto.com/white/" target="_blank">開く →</a></div></div>
-  <a class="card-simple" href="http://www.okura-movie.co.jp/meguro_cinema/now_showing.html" target="_blank"><div><div class="card-name">目黒シネマ</div><div class="card-area">品川区 目黒</div></div><span class="card-simple-arrow">→</span></a>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://ttcg.jp/cineka_omori/','_blank')"></div><iframe src="https://ttcg.jp/cineka_omori/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">キネカ大森</div><div class="card-area">品川区 南大井</div></div><a class="card-link" href="https://ttcg.jp/cineka_omori/" target="_blank">開く →</a></div></div>
-
-  <div class="area-heading">世田谷・下北沢</div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://tollywood.jp/','_blank')"></div><iframe src="https://tollywood.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">下北沢トリウッド</div><div class="card-area">世田谷区 代沢</div></div><a class="card-link" href="https://tollywood.jp/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://k2-cinema.com/','_blank')"></div><iframe src="https://k2-cinema.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シモキタ – エキマエ – シネマ K2</div><div class="card-area">世田谷区 北沢</div></div><a class="card-link" href="https://k2-cinema.com/" target="_blank">開く →</a></div></div>
-  <a class="card-simple" href="http://www.shimotakaidocinema.com/" target="_blank"><div><div class="card-name">下高井戸シネマ</div><div class="card-area">世田谷区 松原</div></div><span class="card-simple-arrow">→</span></a>
-
-  <div class="area-heading">中野・杉並・高円寺</div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://pole2.co.jp/','_blank')"></div><iframe src="https://pole2.co.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ポレポレ東中野</div><div class="card-area">中野区 東中野</div></div><a class="card-link" href="https://pole2.co.jp/" target="_blank">開く →</a></div></div>
-  <a class="card-simple" href="http://www.laputa-jp.com/" target="_blank"><div><div class="card-name">ラピュタ阿佐ヶ谷</div><div class="card-area">杉並区 阿佐ヶ谷</div></div><span class="card-simple-arrow">→</span></a>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.morc-asagaya.com/','_blank')"></div><iframe src="https://www.morc-asagaya.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">Morc阿佐ヶ谷</div><div class="card-area">杉並区 阿佐ヶ谷</div></div><a class="card-link" href="https://www.morc-asagaya.com/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://bacchus-tokyo.com/','_blank')"></div><iframe src="https://bacchus-tokyo.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">高円寺シアターバッカス</div><div class="card-area">杉並区 高円寺</div></div><a class="card-link" href="https://bacchus-tokyo.com/" target="_blank">開く →</a></div></div>
-
-  <div class="area-heading">池袋・豊島</div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.cinemarosa.net/','_blank')"></div><iframe src="https://www.cinemarosa.net/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">池袋シネマ・ロサ</div><div class="card-area">豊島区 西池袋</div></div><a class="card-link" href="https://www.cinemarosa.net/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.shin-bungeiza.com/','_blank')"></div><iframe src="https://www.shin-bungeiza.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">新文芸坐</div><div class="card-area">豊島区 東池袋</div></div><a class="card-link" href="https://www.shin-bungeiza.com/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://cinemahouseotsuka.com/','_blank')"></div><iframe src="https://cinemahouseotsuka.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマハウス大塚</div><div class="card-area">豊島区 巣鴨</div></div><a class="card-link" href="https://cinemahouseotsuka.com/" target="_blank">開く →</a></div></div>
-
-  <div class="area-heading">北・足立・墨田</div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://chupki.jpn.org/','_blank')"></div><iframe src="https://chupki.jpn.org/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマ・チュプキ・タバタ</div><div class="card-area">北区 東田端</div></div><a class="card-link" href="https://chupki.jpn.org/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.art-center.jp/tokyo/bluestudio/profile.html','_blank')"></div><iframe src="https://www.art-center.jp/tokyo/bluestudio/profile.html" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマブルースタジオ</div><div class="card-area">足立区 千住</div></div><a class="card-link" href="https://www.art-center.jp/tokyo/bluestudio/profile.html" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://stranger.jp/','_blank')"></div><iframe src="https://stranger.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">Stranger</div><div class="card-area">墨田区 菊川</div></div><a class="card-link" href="https://stranger.jp/" target="_blank">開く →</a></div></div>
-
-  <div class="area-heading">郊外</div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://joji.uplink.co.jp/','_blank')"></div><iframe src="https://joji.uplink.co.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">アップリンク吉祥寺</div><div class="card-area">武蔵野市 吉祥寺</div></div><a class="card-link" href="https://joji.uplink.co.jp/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://kinocinema.jp/tachikawa/','_blank')"></div><iframe src="https://kinocinema.jp/tachikawa/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">kino cinéma 立川髙島屋S.C.館</div><div class="card-area">立川市</div></div><a class="card-link" href="https://kinocinema.jp/tachikawa/" target="_blank">開く →</a></div></div>
-  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://cinema-neko.com/','_blank')"></div><iframe src="https://cinema-neko.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマネコ</div><div class="card-area">青梅市</div></div><a class="card-link" href="https://cinema-neko.com/" target="_blank">開く →</a></div></div>
-
+<div class="sort-bar">
+  <button class="sort-btn active" id="btn-area" onclick="sortByArea()">📍 エリア順</button>
+  <button class="sort-btn" id="btn-near" onclick="sortByDistance()">🚶 近い順に並べる</button>
 </div>
+<div class="sort-status" id="sort-status"></div>
+
+<div class="grid" id="grid"></div>
+
 <div class="page-footer">
   <a class="back-link" href="https://movico-moviego.com">← MOVICOに戻る</a>
 </div>
+
+<script>
+const THEATERS = [
+  {name:"神保町シアター", area:"千代田区 神保町", url:"https://www.shogakukan.co.jp/jinbocho-theater/", lat:35.6962, lng:139.7572, http:false, areaGroup:"千代田・中央"},
+  {name:"ヒューマントラストシネマ有楽町", area:"千代田区 有楽町", url:"https://ttcg.jp/human_yurakucho/", lat:35.6726, lng:139.7627, http:false, areaGroup:"千代田・中央"},
+  {name:"角川シネマ有楽町", area:"千代田区 有楽町", url:"https://www.kadokawa-cinema.jp/yurakucho/", lat:35.6749, lng:139.7614, http:false, areaGroup:"千代田・中央"},
+  {name:"アテネ・フランセ文化センター", area:"千代田区 神田", url:"https://athenee.net", lat:35.6989, lng:139.7604, http:false, areaGroup:"千代田・中央"},
+  {name:"シネマリス", area:"千代田区 神田小川町", url:"https://cinemalice.theater/", lat:35.6942, lng:139.7574, http:false, areaGroup:"千代田・中央"},
+  {name:"シネスイッチ銀座", area:"中央区 銀座", url:"https://cineswitch.com/", lat:35.6718, lng:139.7651, http:false, areaGroup:"千代田・中央"},
+  {name:"国立映画アーカイブ", area:"中央区 京橋", url:"https://www.nfaj.go.jp/", lat:35.6763, lng:139.7710, http:false, areaGroup:"千代田・中央"},
+  {name:"K's cinema", area:"新宿区 新宿", url:"https://www.ks-cinema.com/", lat:35.6893, lng:139.7030, http:false, areaGroup:"新宿・早稲田"},
+  {name:"新宿武蔵野館", area:"新宿区 新宿", url:"https://shinjuku.musashino-k.jp/", lat:35.6896, lng:139.7021, http:false, areaGroup:"新宿・早稲田"},
+  {name:"シネマート新宿", area:"新宿区 新宿", url:"https://www.cinemart.co.jp/theater/shinjuku/", lat:35.6897, lng:139.7019, http:false, areaGroup:"新宿・早稲田"},
+  {name:"テアトル新宿", area:"新宿区 新宿", url:"https://ttcg.jp/theatre_shinjuku/", lat:35.6886, lng:139.7022, http:false, areaGroup:"新宿・早稲田"},
+  {name:"アンスティチュ・フランセ東京", area:"新宿区 市谷", url:"https://www.institutfrancais.jp/tokyo/agenda/categories/film/", lat:35.6891, lng:139.7358, http:false, areaGroup:"新宿・早稲田"},
+  {name:"早稲田松竹", area:"新宿区 高田馬場", url:"http://wasedashochiku.co.jp/", lat:35.7071, lng:139.7197, http:true, areaGroup:"新宿・早稲田"},
+  {name:"ル・シネマ 渋谷宮下", area:"渋谷区 渋谷", url:"https://www.bunkamura.co.jp/cinema_miyashita/", lat:35.6591, lng:139.7033, http:false, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"恵比寿ガーデンシネマ", area:"渋谷区 恵比寿", url:"https://www.unitedcinemas.jp/ygc/index.html", lat:35.6467, lng:139.7102, http:false, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"ヒューマントラストシネマ渋谷", area:"渋谷区 渋谷", url:"https://ttcg.jp/human_shibuya/", lat:35.6598, lng:139.7022, http:false, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"シアター・イメージフォーラム", area:"渋谷区 渋谷", url:"https://www.imageforum.co.jp/theatre/", lat:35.6601, lng:139.7038, http:false, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"ユーロスペース", area:"渋谷区 円山町", url:"http://www.eurospace.co.jp/", lat:35.6556, lng:139.6966, http:true, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"シネマヴェーラ渋谷", area:"渋谷区 円山町", url:"http://www.cinemavera.com/", lat:35.6556, lng:139.6965, http:true, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"シネクイント渋谷", area:"渋谷区 宇田川町", url:"https://www.cinequinto.com/shibuya/", lat:35.6612, lng:139.6985, http:false, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"ホワイトシネクイント", area:"渋谷区 宇田川町", url:"https://www.cinequinto.com/white/", lat:35.6608, lng:139.6988, http:false, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"目黒シネマ", area:"品川区 目黒", url:"http://www.okura-movie.co.jp/meguro_cinema/now_showing.html", lat:35.6334, lng:139.7159, http:true, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"キネカ大森", area:"品川区 南大井", url:"https://ttcg.jp/cineka_omori/", lat:35.5952, lng:139.7375, http:false, areaGroup:"渋谷・恵比寿・目黒・品川"},
+  {name:"下北沢トリウッド", area:"世田谷区 代沢", url:"https://tollywood.jp/", lat:35.6610, lng:139.6681, http:false, areaGroup:"世田谷・下北沢"},
+  {name:"シモキタ – エキマエ – シネマ K2", area:"世田谷区 北沢", url:"https://k2-cinema.com/", lat:35.6617, lng:139.6685, http:false, areaGroup:"世田谷・下北沢"},
+  {name:"下高井戸シネマ", area:"世田谷区 松原", url:"http://www.shimotakaidocinema.com/", lat:35.6676, lng:139.6388, http:true, areaGroup:"世田谷・下北沢"},
+  {name:"ポレポレ東中野", area:"中野区 東中野", url:"https://pole2.co.jp/", lat:35.7073, lng:139.6853, http:false, areaGroup:"中野・杉並・高円寺"},
+  {name:"ラピュタ阿佐ヶ谷", area:"杉並区 阿佐ヶ谷", url:"http://www.laputa-jp.com/", lat:35.7057, lng:139.6364, http:true, areaGroup:"中野・杉並・高円寺"},
+  {name:"Morc阿佐ヶ谷", area:"杉並区 阿佐ヶ谷", url:"https://www.morc-asagaya.com/", lat:35.7058, lng:139.6365, http:false, areaGroup:"中野・杉並・高円寺"},
+  {name:"高円寺シアターバッカス", area:"杉並区 高円寺", url:"https://bacchus-tokyo.com/", lat:35.7053, lng:139.6494, http:false, areaGroup:"中野・杉並・高円寺"},
+  {name:"池袋シネマ・ロサ", area:"豊島区 西池袋", url:"https://www.cinemarosa.net/", lat:35.7298, lng:139.7100, http:false, areaGroup:"池袋・豊島"},
+  {name:"新文芸坐", area:"豊島区 東池袋", url:"https://www.shin-bungeiza.com/", lat:35.7294, lng:139.7187, http:false, areaGroup:"池袋・豊島"},
+  {name:"シネマハウス大塚", area:"豊島区 巣鴨", url:"https://cinemahouseotsuka.com/", lat:35.7281, lng:139.7285, http:false, areaGroup:"池袋・豊島"},
+  {name:"シネマ・チュプキ・タバタ", area:"北区 東田端", url:"https://chupki.jpn.org/", lat:35.7368, lng:139.7630, http:false, areaGroup:"北・足立・墨田"},
+  {name:"シネマブルースタジオ", area:"足立区 千住", url:"https://www.art-center.jp/tokyo/bluestudio/profile.html", lat:35.7480, lng:139.8038, http:false, areaGroup:"北・足立・墨田"},
+  {name:"Stranger", area:"墨田区 菊川", url:"https://stranger.jp/", lat:35.6891, lng:139.8075, http:false, areaGroup:"北・足立・墨田"},
+  {name:"アップリンク吉祥寺", area:"武蔵野市 吉祥寺", url:"https://joji.uplink.co.jp/", lat:35.7028, lng:139.5797, http:false, areaGroup:"郊外"},
+  {name:"kino cinéma 立川髙島屋S.C.館", area:"立川市", url:"https://kinocinema.jp/tachikawa/", lat:35.6982, lng:139.4144, http:false, areaGroup:"郊外"},
+  {name:"シネマネコ", area:"青梅市", url:"https://cinema-neko.com/", lat:35.7878, lng:139.2753, http:false, areaGroup:"郊外"},
+];
+
+let currentSort = 'area';
+let userLat = null;
+let userLng = null;
+
+function calcDist(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng/2) * Math.sin(dLng/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function fmtDist(km) {
+  return km < 1 ? Math.round(km * 1000) + 'm' : km.toFixed(1) + 'km';
+}
+
+function makeCard(t, showDist) {
+  const distHtml = (showDist && t.dist !== undefined)
+    ? `<div class="card-dist" style="display:block">📍 ${fmtDist(t.dist)}</div>` : '';
+
+  if (t.http) {
+    return `<a class="card-simple" href="${t.url}" target="_blank">
+      <div>
+        <div class="card-name">${t.name}</div>
+        <div class="card-area">${t.area}</div>
+        ${distHtml}
+      </div>
+      <span class="card-simple-arrow">→</span>
+    </a>`;
+  }
+  return `<div class="card">
+    <div class="iframe-wrap">
+      <div class="card-overlay" onclick="window.open('${t.url}','_blank')"></div>
+      <iframe src="${t.url}" loading="lazy"></iframe>
+    </div>
+    <div class="card-footer">
+      <div>
+        <div class="card-name">${t.name}</div>
+        <div class="card-area">${t.area}</div>
+        ${distHtml}
+      </div>
+      <a class="card-link" href="${t.url}" target="_blank">開く →</a>
+    </div>
+  </div>`;
+}
+
+function sortByArea() {
+  currentSort = 'area';
+  document.getElementById('btn-area').classList.add('active');
+  document.getElementById('btn-near').classList.remove('active');
+  document.getElementById('sort-status').textContent = '';
+
+  const groups = {};
+  THEATERS.forEach(t => {
+    if (!groups[t.areaGroup]) groups[t.areaGroup] = [];
+    groups[t.areaGroup].push(t);
+  });
+
+  const order = ['千代田・中央','新宿・早稲田','渋谷・恵比寿・目黒・品川','世田谷・下北沢','中野・杉並・高円寺','池袋・豊島','北・足立・墨田','郊外'];
+  let html = '';
+  order.forEach(g => {
+    if (!groups[g]) return;
+    html += `<div class="area-heading">${g}</div>`;
+    groups[g].forEach(t => { html += makeCard(t, false); });
+  });
+  document.getElementById('grid').innerHTML = html;
+}
+
+function sortByDistance() {
+  currentSort = 'near';
+  document.getElementById('btn-near').classList.add('active');
+  document.getElementById('btn-area').classList.remove('active');
+
+  if (userLat && userLng) {
+    renderByDistance();
+    return;
+  }
+
+  document.getElementById('sort-status').textContent = '現在地を取得中...';
+  if (!navigator.geolocation) {
+    document.getElementById('sort-status').textContent = '位置情報が使えません';
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(pos => {
+    userLat = pos.coords.latitude;
+    userLng = pos.coords.longitude;
+    renderByDistance();
+  }, () => {
+    document.getElementById('sort-status').textContent = '位置情報の取得を許可してください';
+    document.getElementById('btn-area').classList.add('active');
+    document.getElementById('btn-near').classList.remove('active');
+  });
+}
+
+function renderByDistance() {
+  const sorted = THEATERS.map(t => ({
+    ...t,
+    dist: calcDist(userLat, userLng, t.lat, t.lng)
+  })).sort((a, b) => a.dist - b.dist);
+
+  document.getElementById('sort-status').textContent = `現在地から近い順（全${sorted.length}館）`;
+  let html = '';
+  sorted.forEach(t => { html += makeCard(t, true); });
+  document.getElementById('grid').innerHTML = html;
+}
+
+// 初期表示
+sortByArea();
+</script>
 </body>
 </html>
