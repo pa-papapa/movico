@@ -745,7 +745,8 @@ function openPopup(movie) {
   }
 
   // Show nearby theaters from Google Places, fallback to sample
-  const theaters = nearbyTheaters.length > 0 ? nearbyTheaters.slice(0,5) : CINEPLEX.slice(0,3);
+  const shuffled = [...(nearbyTheaters.length > 0 ? nearbyTheaters : CINEPLEX)].sort(() => Math.random() - 0.5);
+  const theaters = shuffled.slice(0, 5);
   document.getElementById('popup-theaters').innerHTML = theaters.map(t => `
     <div class="theater-item">
       <div>
