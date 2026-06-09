@@ -7,230 +7,45 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --sky: #c8dff0;
     --sky-deep: #a0c4e0;
     --ink: #1a2a3a;
     --ink-soft: #3a5068;
-    --cloud: #ffffff;
     --cloud-shadow: rgba(150,190,220,0.3);
     --accent: #e07060;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: linear-gradient(180deg, #d6eaf8 0%, #bdd6ec 40%, #a8c8e4 100%);
-    min-height: 100vh;
-    color: var(--ink);
-  }
-
-  header {
-    text-align: center;
-    padding: 2rem 1rem 1.2rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: linear-gradient(180deg, rgba(214,234,248,0.97) 0%, rgba(189,214,236,0.95) 100%);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(160,196,224,0.3);
-  }
-
-  .logo-svg { width: 160px; height: 55px; display: block; margin: 0 auto; }
-
-  .tagline {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.8rem;
-    color: var(--ink-soft);
-    letter-spacing: 0.08em;
-    margin-top: 0.2rem;
-  }
-
-  .page-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-weight: 300;
-    color: var(--ink);
-    letter-spacing: 0.1em;
-    margin-top: 0.6rem;
-  }
-
-  /* グリッド */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1rem;
-    padding: 1.2rem 1rem 3rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  /* カード */
-  .card {
-    background: rgba(255,255,255,0.9);
-    border-radius: 1rem;
-    overflow: hidden;
-    box-shadow: 0 4px 16px var(--cloud-shadow);
-    transition: transform 0.22s ease, box-shadow 0.22s ease;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 28px rgba(150,190,220,0.5);
-  }
-
-  /* iframeラッパー */
-  .iframe-wrap {
-    position: relative;
-    width: 100%;
-    height: 220px;
-    overflow: hidden;
-    background: #f0f4f8;
-  }
-
-  .iframe-wrap iframe {
-    width: 150%;
-    height: 150%;
-    border: none;
-    transform: scale(0.667);
-    transform-origin: top left;
-    pointer-events: none;
-  }
-
-  /* iframe表示できない時のフォールバック */
-  .iframe-fallback {
-    display: none;
-    position: absolute;
-    inset: 0;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #c8dff0, #a0c4e0);
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .iframe-fallback-icon {
-    font-size: 2rem;
-  }
-
-  .iframe-fallback-text {
-    font-size: 0.75rem;
-    color: var(--ink-soft);
-    font-style: italic;
-  }
-
-  /* クリック可能なオーバーレイ */
-  .card-overlay {
-    position: absolute;
-    inset: 0;
-    cursor: pointer;
-    z-index: 10;
-  }
-
-  /* カード下部 */
-  .card-footer {
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid rgba(160,196,224,0.25);
-    background: rgba(255,255,255,0.95);
-  }
-
-  .card-info { flex: 1; }
-
-  .card-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem;
-    font-weight: 400;
-    color: var(--ink);
-    line-height: 1.3;
-  }
-
-  .card-area {
-    font-size: 0.68rem;
-    color: var(--ink-soft);
-    margin-top: 1px;
-  }
-
-  .card-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.72rem;
-    color: var(--ink-soft);
-    text-decoration: none;
-    border: 1px solid rgba(160,196,224,0.5);
-    border-radius: 1rem;
-    padding: 0.25rem 0.7rem;
-    transition: all 0.2s;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-left: 0.5rem;
-  }
-
-  .card-link:hover {
-    background: var(--ink);
-    color: white;
-    border-color: var(--ink);
-  }
-
-  /* エリア見出し */
-  .area-heading {
-    grid-column: 1 / -1;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-    padding: 0.5rem 0 0.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .area-heading::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(58,80,104,0.2);
-  }
-
-  /* フッター */
-  .page-footer {
-    text-align: center;
-    padding: 1rem 1rem 3rem;
-  }
-
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8rem;
-    color: var(--ink-soft);
-    text-decoration: none;
-    border: 1px solid rgba(58,80,104,0.25);
-    border-radius: 2rem;
-    padding: 0.4rem 1rem;
-    transition: all 0.2s;
-  }
-
-  .back-link:hover {
-    background: rgba(255,255,255,0.6);
-    color: var(--ink);
-  }
-
-  @media (max-width: 600px) {
-    .grid { grid-template-columns: 1fr; gap: 0.75rem; padding: 0.75rem 0.75rem 3rem; }
-    .iframe-wrap { height: 180px; }
-  }
+  body { font-family: 'DM Sans', sans-serif; background: linear-gradient(180deg, #d6eaf8 0%, #bdd6ec 40%, #a8c8e4 100%); min-height: 100vh; color: var(--ink); }
+  header { text-align: center; padding: 1.8rem 1rem 1rem; position: sticky; top: 0; z-index: 100; background: linear-gradient(180deg, rgba(214,234,248,0.97) 0%, rgba(189,214,236,0.95) 100%); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(160,196,224,0.3); }
+  .logo-svg { width: 150px; height: 50px; display: block; margin: 0 auto; }
+  .tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.78rem; color: var(--ink-soft); letter-spacing: 0.08em; margin-top: 0.2rem; }
+  .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 300; color: var(--ink); letter-spacing: 0.1em; margin-top: 0.5rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.9rem; padding: 1.2rem 1rem 3rem; max-width: 1400px; margin: 0 auto; }
+  .area-heading { grid-column: 1 / -1; font-family: 'Cormorant Garamond', serif; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--ink-soft); text-transform: uppercase; padding: 0.4rem 0 0.1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .area-heading::after { content: ''; flex: 1; height: 1px; background: rgba(58,80,104,0.2); }
+  .card { background: rgba(255,255,255,0.9); border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 16px var(--cloud-shadow); transition: transform 0.22s ease, box-shadow 0.22s ease; display: flex; flex-direction: column; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(150,190,220,0.5); }
+  .iframe-wrap { position: relative; width: 100%; height: 200px; overflow: hidden; background: #eef4f8; }
+  .iframe-wrap iframe { width: 150%; height: 150%; border: none; transform: scale(0.667); transform-origin: top left; pointer-events: none; }
+  .card-overlay { position: absolute; inset: 0; cursor: pointer; z-index: 10; }
+  .card-footer { padding: 0.65rem 0.9rem; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(160,196,224,0.25); background: rgba(255,255,255,0.95); }
+  .card-name { font-family: 'Cormorant Garamond', serif; font-size: 0.92rem; color: var(--ink); line-height: 1.3; }
+  .card-area { font-size: 0.65rem; color: var(--ink-soft); margin-top: 1px; }
+  .card-link { display: inline-flex; align-items: center; font-size: 0.7rem; color: var(--ink-soft); text-decoration: none; border: 1px solid rgba(160,196,224,0.5); border-radius: 1rem; padding: 0.22rem 0.65rem; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; margin-left: 0.4rem; }
+  .card-link:hover { background: var(--ink); color: white; border-color: var(--ink); }
+  .card-simple { background: rgba(255,255,255,0.82); border-radius: 1rem; padding: 1rem 1.1rem; box-shadow: 0 3px 12px var(--cloud-shadow); transition: transform 0.22s ease, box-shadow 0.22s ease; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--ink); position: relative; overflow: hidden; }
+  .card-simple::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--sky-deep), var(--accent)); opacity: 0; transition: opacity 0.2s; }
+  .card-simple:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(150,190,220,0.45); }
+  .card-simple:hover::before { opacity: 1; }
+  .card-simple .card-name { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; }
+  .card-simple .card-area { font-size: 0.67rem; color: var(--ink-soft); margin-top: 2px; }
+  .card-simple-arrow { font-size: 0.8rem; color: var(--sky-deep); flex-shrink: 0; margin-left: 0.5rem; }
+  .page-footer { text-align: center; padding: 1rem 1rem 3rem; }
+  .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--ink-soft); text-decoration: none; border: 1px solid rgba(58,80,104,0.25); border-radius: 2rem; padding: 0.4rem 1rem; transition: all 0.2s; }
+  .back-link:hover { background: rgba(255,255,255,0.6); color: var(--ink); }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; gap: 0.7rem; padding: 0.8rem 0.75rem 3rem; } .iframe-wrap { height: 170px; } }
 </style>
 </head>
 <body>
-
 <header>
   <svg class="logo-svg" viewBox="0 0 260 90" fill="none" xmlns="http://www.w3.org/2000/svg">
     <ellipse cx="130" cy="60" rx="110" ry="28" fill="white" opacity="0.9"/>
@@ -244,230 +59,66 @@
   <div class="tagline">wander into a film</div>
   <div class="page-title">お気に入り映画館</div>
 </header>
-
 <div class="grid">
 
-  <!-- 千代田・中央 -->
   <div class="area-heading">千代田・中央</div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.shogakukan.co.jp/jinbocho-theater/','_blank')"></div><iframe src="https://www.shogakukan.co.jp/jinbocho-theater/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">神保町シアター</div><div class="card-area">千代田区 神保町</div></div><a class="card-link" href="https://www.shogakukan.co.jp/jinbocho-theater/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://ttcg.jp/human_yurakucho/','_blank')"></div><iframe src="https://ttcg.jp/human_yurakucho/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ヒューマントラストシネマ有楽町</div><div class="card-area">千代田区 有楽町</div></div><a class="card-link" href="https://ttcg.jp/human_yurakucho/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.kadokawa-cinema.jp/yurakucho/','_blank')"></div><iframe src="https://www.kadokawa-cinema.jp/yurakucho/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">角川シネマ有楽町</div><div class="card-area">千代田区 有楽町</div></div><a class="card-link" href="https://www.kadokawa-cinema.jp/yurakucho/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://athenee.net','_blank')"></div><iframe src="https://athenee.net" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">アテネ・フランセ文化センター</div><div class="card-area">千代田区 神田</div></div><a class="card-link" href="https://athenee.net" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://cinemalice.theater/','_blank')"></div><iframe src="https://cinemalice.theater/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマリス</div><div class="card-area">千代田区 神田小川町</div></div><a class="card-link" href="https://cinemalice.theater/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://cineswitch.com/','_blank')"></div><iframe src="https://cineswitch.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネスイッチ銀座</div><div class="card-area">中央区 銀座</div></div><a class="card-link" href="https://cineswitch.com/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.nfaj.go.jp/','_blank')"></div><iframe src="https://www.nfaj.go.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">国立映画アーカイブ</div><div class="card-area">中央区 京橋</div></div><a class="card-link" href="https://www.nfaj.go.jp/" target="_blank">開く →</a></div></div>
 
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('https://ttcg.jp/human_yurakucho/','_blank')"></div>
-      <iframe src="https://ttcg.jp/human_yurakucho/" loading="lazy" title="ヒューマントラストシネマ有楽町"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">ヒューマントラストシネマ有楽町</div>
-        <div class="card-area">千代田区 有楽町</div>
-      </div>
-      <a class="card-link" href="https://ttcg.jp/human_yurakucho/" target="_blank">開く →</a>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('https://cineswitch.com/','_blank')"></div>
-      <iframe src="https://cineswitch.com/" loading="lazy" title="シネスイッチ銀座"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">シネスイッチ銀座</div>
-        <div class="card-area">中央区 銀座</div>
-      </div>
-      <a class="card-link" href="https://cineswitch.com/" target="_blank">開く →</a>
-    </div>
-  </div>
-
-  <!-- 新宿・早稲田 -->
   <div class="area-heading">新宿・早稲田</div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.ks-cinema.com/','_blank')"></div><iframe src="https://www.ks-cinema.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">K's cinema</div><div class="card-area">新宿区 新宿</div></div><a class="card-link" href="https://www.ks-cinema.com/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://shinjuku.musashino-k.jp/','_blank')"></div><iframe src="https://shinjuku.musashino-k.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">新宿武蔵野館</div><div class="card-area">新宿区 新宿</div></div><a class="card-link" href="https://shinjuku.musashino-k.jp/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.cinemart.co.jp/theater/shinjuku/','_blank')"></div><iframe src="https://www.cinemart.co.jp/theater/shinjuku/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマート新宿</div><div class="card-area">新宿区 新宿</div></div><a class="card-link" href="https://www.cinemart.co.jp/theater/shinjuku/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://ttcg.jp/theatre_shinjuku/','_blank')"></div><iframe src="https://ttcg.jp/theatre_shinjuku/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">テアトル新宿</div><div class="card-area">新宿区 新宿</div></div><a class="card-link" href="https://ttcg.jp/theatre_shinjuku/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.institutfrancais.jp/tokyo/agenda/categories/film/','_blank')"></div><iframe src="https://www.institutfrancais.jp/tokyo/agenda/categories/film/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">アンスティチュ・フランセ東京</div><div class="card-area">新宿区 市谷</div></div><a class="card-link" href="https://www.institutfrancais.jp/tokyo/agenda/categories/film/" target="_blank">開く →</a></div></div>
+  <a class="card-simple" href="http://wasedashochiku.co.jp/" target="_blank"><div><div class="card-name">早稲田松竹</div><div class="card-area">新宿区 高田馬場</div></div><span class="card-simple-arrow">→</span></a>
 
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('http://wasedashochiku.co.jp/','_blank')"></div>
-      <iframe src="http://wasedashochiku.co.jp/" loading="lazy" title="早稲田松竹"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">早稲田松竹</div>
-        <div class="card-area">新宿区 高田馬場</div>
-      </div>
-      <a class="card-link" href="http://wasedashochiku.co.jp/" target="_blank">開く →</a>
-    </div>
-  </div>
+  <div class="area-heading">渋谷・恵比寿・目黒・品川</div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.bunkamura.co.jp/cinema_miyashita/','_blank')"></div><iframe src="https://www.bunkamura.co.jp/cinema_miyashita/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ル・シネマ 渋谷宮下</div><div class="card-area">渋谷区 渋谷</div></div><a class="card-link" href="https://www.bunkamura.co.jp/cinema_miyashita/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.unitedcinemas.jp/ygc/index.html','_blank')"></div><iframe src="https://www.unitedcinemas.jp/ygc/index.html" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">恵比寿ガーデンシネマ</div><div class="card-area">渋谷区 恵比寿</div></div><a class="card-link" href="https://www.unitedcinemas.jp/ygc/index.html" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://ttcg.jp/human_shibuya/','_blank')"></div><iframe src="https://ttcg.jp/human_shibuya/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ヒューマントラストシネマ渋谷</div><div class="card-area">渋谷区 渋谷</div></div><a class="card-link" href="https://ttcg.jp/human_shibuya/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.imageforum.co.jp/theatre/','_blank')"></div><iframe src="https://www.imageforum.co.jp/theatre/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シアター・イメージフォーラム</div><div class="card-area">渋谷区 渋谷</div></div><a class="card-link" href="https://www.imageforum.co.jp/theatre/" target="_blank">開く →</a></div></div>
+  <a class="card-simple" href="http://www.eurospace.co.jp/" target="_blank"><div><div class="card-name">ユーロスペース</div><div class="card-area">渋谷区 円山町</div></div><span class="card-simple-arrow">→</span></a>
+  <a class="card-simple" href="http://www.cinemavera.com/" target="_blank"><div><div class="card-name">シネマヴェーラ渋谷</div><div class="card-area">渋谷区 円山町</div></div><span class="card-simple-arrow">→</span></a>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.cinequinto.com/shibuya/','_blank')"></div><iframe src="https://www.cinequinto.com/shibuya/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネクイント渋谷</div><div class="card-area">渋谷区 宇田川町</div></div><a class="card-link" href="https://www.cinequinto.com/shibuya/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.cinequinto.com/white/','_blank')"></div><iframe src="https://www.cinequinto.com/white/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ホワイトシネクイント</div><div class="card-area">渋谷区 宇田川町</div></div><a class="card-link" href="https://www.cinequinto.com/white/" target="_blank">開く →</a></div></div>
+  <a class="card-simple" href="http://www.okura-movie.co.jp/meguro_cinema/now_showing.html" target="_blank"><div><div class="card-name">目黒シネマ</div><div class="card-area">品川区 目黒</div></div><span class="card-simple-arrow">→</span></a>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://ttcg.jp/cineka_omori/','_blank')"></div><iframe src="https://ttcg.jp/cineka_omori/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">キネカ大森</div><div class="card-area">品川区 南大井</div></div><a class="card-link" href="https://ttcg.jp/cineka_omori/" target="_blank">開く →</a></div></div>
 
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('https://www.ks-cinema.com/','_blank')"></div>
-      <iframe src="https://www.ks-cinema.com/" loading="lazy" title="K's cinema"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">K's cinema</div>
-        <div class="card-area">新宿区 新宿</div>
-      </div>
-      <a class="card-link" href="https://www.ks-cinema.com/" target="_blank">開く →</a>
-    </div>
-  </div>
+  <div class="area-heading">世田谷・下北沢</div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://tollywood.jp/','_blank')"></div><iframe src="https://tollywood.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">下北沢トリウッド</div><div class="card-area">世田谷区 代沢</div></div><a class="card-link" href="https://tollywood.jp/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://k2-cinema.com/','_blank')"></div><iframe src="https://k2-cinema.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シモキタ – エキマエ – シネマ K2</div><div class="card-area">世田谷区 北沢</div></div><a class="card-link" href="https://k2-cinema.com/" target="_blank">開く →</a></div></div>
+  <a class="card-simple" href="http://www.shimotakaidocinema.com/" target="_blank"><div><div class="card-name">下高井戸シネマ</div><div class="card-area">世田谷区 松原</div></div><span class="card-simple-arrow">→</span></a>
 
-  <!-- 渋谷 -->
-  <div class="area-heading">渋谷</div>
+  <div class="area-heading">中野・杉並・高円寺</div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://pole2.co.jp/','_blank')"></div><iframe src="https://pole2.co.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">ポレポレ東中野</div><div class="card-area">中野区 東中野</div></div><a class="card-link" href="https://pole2.co.jp/" target="_blank">開く →</a></div></div>
+  <a class="card-simple" href="http://www.laputa-jp.com/" target="_blank"><div><div class="card-name">ラピュタ阿佐ヶ谷</div><div class="card-area">杉並区 阿佐ヶ谷</div></div><span class="card-simple-arrow">→</span></a>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.morc-asagaya.com/','_blank')"></div><iframe src="https://www.morc-asagaya.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">Morc阿佐ヶ谷</div><div class="card-area">杉並区 阿佐ヶ谷</div></div><a class="card-link" href="https://www.morc-asagaya.com/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://bacchus-tokyo.com/','_blank')"></div><iframe src="https://bacchus-tokyo.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">高円寺シアターバッカス</div><div class="card-area">杉並区 高円寺</div></div><a class="card-link" href="https://bacchus-tokyo.com/" target="_blank">開く →</a></div></div>
 
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('https://www.imageforum.co.jp/theatre/','_blank')"></div>
-      <iframe src="https://www.imageforum.co.jp/theatre/" loading="lazy" title="シアター・イメージフォーラム"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">シアター・イメージフォーラム</div>
-        <div class="card-area">渋谷区 渋谷</div>
-      </div>
-      <a class="card-link" href="https://www.imageforum.co.jp/theatre/" target="_blank">開く →</a>
-    </div>
-  </div>
+  <div class="area-heading">池袋・豊島</div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.cinemarosa.net/','_blank')"></div><iframe src="https://www.cinemarosa.net/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">池袋シネマ・ロサ</div><div class="card-area">豊島区 西池袋</div></div><a class="card-link" href="https://www.cinemarosa.net/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.shin-bungeiza.com/','_blank')"></div><iframe src="https://www.shin-bungeiza.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">新文芸坐</div><div class="card-area">豊島区 東池袋</div></div><a class="card-link" href="https://www.shin-bungeiza.com/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://cinemahouseotsuka.com/','_blank')"></div><iframe src="https://cinemahouseotsuka.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマハウス大塚</div><div class="card-area">豊島区 巣鴨</div></div><a class="card-link" href="https://cinemahouseotsuka.com/" target="_blank">開く →</a></div></div>
 
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('http://www.eurospace.co.jp/','_blank')"></div>
-      <iframe src="http://www.eurospace.co.jp/" loading="lazy" title="ユーロスペース"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">ユーロスペース</div>
-        <div class="card-area">渋谷区 円山町</div>
-      </div>
-      <a class="card-link" href="http://www.eurospace.co.jp/" target="_blank">開く →</a>
-    </div>
-  </div>
+  <div class="area-heading">北・足立・墨田</div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://chupki.jpn.org/','_blank')"></div><iframe src="https://chupki.jpn.org/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマ・チュプキ・タバタ</div><div class="card-area">北区 東田端</div></div><a class="card-link" href="https://chupki.jpn.org/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://www.art-center.jp/tokyo/bluestudio/profile.html','_blank')"></div><iframe src="https://www.art-center.jp/tokyo/bluestudio/profile.html" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマブルースタジオ</div><div class="card-area">足立区 千住</div></div><a class="card-link" href="https://www.art-center.jp/tokyo/bluestudio/profile.html" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://stranger.jp/','_blank')"></div><iframe src="https://stranger.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">Stranger</div><div class="card-area">墨田区 菊川</div></div><a class="card-link" href="https://stranger.jp/" target="_blank">開く →</a></div></div>
 
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('http://www.cinemavera.com/','_blank')"></div>
-      <iframe src="http://www.cinemavera.com/" loading="lazy" title="シネマヴェーラ渋谷"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">シネマヴェーラ渋谷</div>
-        <div class="card-area">渋谷区 円山町</div>
-      </div>
-      <a class="card-link" href="http://www.cinemavera.com/" target="_blank">開く →</a>
-    </div>
-  </div>
-
-  <!-- 世田谷 -->
-  <div class="area-heading">世田谷</div>
-
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('http://www.shimotakaidocinema.com/','_blank')"></div>
-      <iframe src="http://www.shimotakaidocinema.com/" loading="lazy" title="下高井戸シネマ"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">下高井戸シネマ</div>
-        <div class="card-area">世田谷区 松原</div>
-      </div>
-      <a class="card-link" href="http://www.shimotakaidocinema.com/" target="_blank">開く →</a>
-    </div>
-  </div>
-
-  <!-- 中野・杉並 -->
-  <div class="area-heading">中野・杉並</div>
-
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('https://pole2.co.jp/','_blank')"></div>
-      <iframe src="https://pole2.co.jp/" loading="lazy" title="ポレポレ東中野"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">ポレポレ東中野</div>
-        <div class="card-area">中野区 東中野</div>
-      </div>
-      <a class="card-link" href="https://pole2.co.jp/" target="_blank">開く →</a>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('http://www.laputa-jp.com/','_blank')"></div>
-      <iframe src="http://www.laputa-jp.com/" loading="lazy" title="ラピュタ阿佐ヶ谷"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">ラピュタ阿佐ヶ谷</div>
-        <div class="card-area">杉並区 阿佐ヶ谷</div>
-      </div>
-      <a class="card-link" href="http://www.laputa-jp.com/" target="_blank">開く →</a>
-    </div>
-  </div>
-
-  <!-- 池袋 -->
-  <div class="area-heading">池袋</div>
-
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('https://www.shin-bungeiza.com/','_blank')"></div>
-      <iframe src="https://www.shin-bungeiza.com/" loading="lazy" title="新文芸坐"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">新文芸坐</div>
-        <div class="card-area">豊島区 東池袋</div>
-      </div>
-      <a class="card-link" href="https://www.shin-bungeiza.com/" target="_blank">開く →</a>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('https://www.cinemarosa.net/','_blank')"></div>
-      <iframe src="https://www.cinemarosa.net/" loading="lazy" title="池袋シネマ・ロサ"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">池袋シネマ・ロサ</div>
-        <div class="card-area">豊島区 西池袋</div>
-      </div>
-      <a class="card-link" href="https://www.cinemarosa.net/" target="_blank">開く →</a>
-    </div>
-  </div>
-
-  <!-- 郊外 -->
   <div class="area-heading">郊外</div>
-
-  <div class="card">
-    <div class="iframe-wrap">
-      <div class="card-overlay" onclick="window.open('https://joji.uplink.co.jp/','_blank')"></div>
-      <iframe src="https://joji.uplink.co.jp/" loading="lazy" title="アップリンク吉祥寺"></iframe>
-      <div class="iframe-fallback"><div class="iframe-fallback-icon">🎬</div><div class="iframe-fallback-text">サイトを開く</div></div>
-    </div>
-    <div class="card-footer">
-      <div class="card-info">
-        <div class="card-name">アップリンク吉祥寺</div>
-        <div class="card-area">武蔵野市 吉祥寺</div>
-      </div>
-      <a class="card-link" href="https://joji.uplink.co.jp/" target="_blank">開く →</a>
-    </div>
-  </div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://joji.uplink.co.jp/','_blank')"></div><iframe src="https://joji.uplink.co.jp/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">アップリンク吉祥寺</div><div class="card-area">武蔵野市 吉祥寺</div></div><a class="card-link" href="https://joji.uplink.co.jp/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://kinocinema.jp/tachikawa/','_blank')"></div><iframe src="https://kinocinema.jp/tachikawa/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">kino cinéma 立川髙島屋S.C.館</div><div class="card-area">立川市</div></div><a class="card-link" href="https://kinocinema.jp/tachikawa/" target="_blank">開く →</a></div></div>
+  <div class="card"><div class="iframe-wrap"><div class="card-overlay" onclick="window.open('https://cinema-neko.com/','_blank')"></div><iframe src="https://cinema-neko.com/" loading="lazy"></iframe></div><div class="card-footer"><div><div class="card-name">シネマネコ</div><div class="card-area">青梅市</div></div><a class="card-link" href="https://cinema-neko.com/" target="_blank">開く →</a></div></div>
 
 </div>
-
 <div class="page-footer">
   <a class="back-link" href="https://movico-moviego.com">← MOVICOに戻る</a>
 </div>
-
 </body>
 </html>
